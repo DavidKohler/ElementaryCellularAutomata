@@ -4,11 +4,13 @@ Java project to simulate elementary (1D) cellular automata
 ## Installation
 Note: You need to have Java installed on your computer
 
+
 Option 1:
 
 Copy the repository.
 
 Navigate to `ElementaryCellularAutomata/out/artifacts/ElementaryCellularAutomata_jar` to find important executables
+
 
 
 Option 2:
@@ -19,6 +21,7 @@ https://drive.google.com/drive/folders/1AZwU18H_s1bb04KjTSPvqd2lI6VQf-fl?usp=sha
 
 ## Usage
 Run this command from the folder containing the .jar file: `java -jar ElementaryCellularAutomata.jar`
+
 
 
 Optionally:
