@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.Scanner;
 
 public class ElementaryCAApp {
@@ -21,17 +22,19 @@ public class ElementaryCAApp {
 
     /**
      * Gets dimensions of window from user
-     * @param sc    Scanner object for user input
-     * @param dim   String indicating which dimension currently parsing
-     * @return      int input of chosen dimension
+     * @param sc        Scanner object for user input
+     * @param dim       String indicating which dimension currently parsing
+     * @param maxDim    Max value of chosen dimension possible
+     * @return          int input of chosen dimension
      */
-    public static int inputDimensions(Scanner sc, String dim) {
+    public static int inputDimensions(Scanner sc, String dim, double maxDim) {
         int num;
+        int maxVal = (int) maxDim;
         do {
-            System.out.printf("\nPlease Enter Window %s (must not be more than 1280): ", dim);
+            System.out.printf("\nPlease Enter Window %s (must not be more than %d): ", dim, maxVal);
             while (!sc.hasNextInt()) {
                 System.out.println("Invalid response!");
-                System.out.printf("\nPlease Enter Window %s (must not be more than 1280): ", dim);
+                System.out.printf("\nPlease Enter Window %s (must not be more than %d): ", dim, maxVal);
                 sc.next();
             }
             num = sc.nextInt();
@@ -51,8 +54,13 @@ public class ElementaryCAApp {
         int width;
         int height;
         Scanner sc = new Scanner(System.in);
-        width = inputDimensions(sc, "Width");
-        height = inputDimensions(sc, "Height");
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double maxW = screenSize.getWidth();
+        double maxH = screenSize.getHeight() - 70;
+
+        width = inputDimensions(sc, "Width", maxW);
+        height = inputDimensions(sc, "Height", maxH);
 
         new ElementaryCAApp(width, height);
     }

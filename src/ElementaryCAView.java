@@ -23,8 +23,8 @@ public class ElementaryCAView {
         this.height = height;
 
 
-        this.cellMultiplier = 2;
-        this.cellSize = 1;
+        this.cellMultiplier = 1;
+        this.cellSize = 0.5;
 
         StdDraw.setCanvasSize(width * cellMultiplier, height * cellMultiplier);
         StdDraw.setYscale(0, height * cellMultiplier);
