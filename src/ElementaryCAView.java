@@ -9,22 +9,11 @@ public class ElementaryCAView {
      * @param width     width of application window. Must be >0
      * @param height    height of application window. Must be >0
      */
-    public ElementaryCAView(final int width, final int height) {
-        int cellMultiplier1;
-        double cellSize1;
-
-        if (width < 1) {
-            throw new IllegalArgumentException("Width must be a positive value");
-        }
-        if (height < 1) {
-            throw new IllegalArgumentException("Height must be a positive value");
-        }
+    public ElementaryCAView(final int width, final int height, final int maxW, final int maxH) {
         this.width = width;
         this.height = height;
-
-
-        this.cellMultiplier = 1;
-        this.cellSize = 0.5;
+        this.cellMultiplier = Math.min(maxW / width, maxH / height);
+        this.cellSize = cellMultiplier / 2;
 
         StdDraw.setCanvasSize(width * cellMultiplier, height * cellMultiplier);
         StdDraw.setYscale(0, height * cellMultiplier);

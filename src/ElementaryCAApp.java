@@ -8,33 +8,26 @@ public class ElementaryCAApp {
      * @param width The width to use for the application window. Cannot be negative or zero.
      * @param height The height to use for the application window. Cannot be negative or zero.
      */
-    public ElementaryCAApp(final int width, final int height) {
-        if (width < 1) {
-            throw new IllegalArgumentException("Width must be positive");
-        }
-        if (height < 1) {
-            throw new IllegalArgumentException("Height must be positive");
-        }
-        final ElementaryCAView elemCAView = new ElementaryCAView(width, height);
+    public ElementaryCAApp(final int width, final int height, final int maxW, final int maxH) {
+        final ElementaryCAView elemCAView = new ElementaryCAView(width, height, maxW, maxH);
         final ElementaryCAPresenter elemCAPresenter = new ElementaryCAPresenter(elemCAView);
         elemCAPresenter.start();
     }
 
     /**
-     * Gets dimensions of window from user
+     * Gets dimensions of automaton from user
      * @param sc        Scanner object for user input
      * @param dim       String indicating which dimension currently parsing
      * @param maxDim    Max value of chosen dimension possible
      * @return          int input of chosen dimension
      */
-    public static int inputDimensions(Scanner sc, String dim, double maxDim) {
+    public static int inputDimensions(Scanner sc, String dim, int maxDim) {
         int num;
-        int maxVal = (int) maxDim;
         do {
-            System.out.printf("\nPlease Enter Window %s (must not be more than %d): ", dim, maxVal);
+            System.out.printf("\nPlease Enter Automaton %s (must not be more than %d): ", dim, maxDim);
             while (!sc.hasNextInt()) {
                 System.out.println("Invalid response!");
-                System.out.printf("\nPlease Enter Window %s (must not be more than %d): ", dim, maxVal);
+                System.out.printf("\nPlease Enter Automaton %s (must not be more than %d): ", dim, maxDim);
                 sc.next();
             }
             num = sc.nextInt();
@@ -56,12 +49,12 @@ public class ElementaryCAApp {
         Scanner sc = new Scanner(System.in);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double maxW = screenSize.getWidth();
-        double maxH = screenSize.getHeight() - 70;
+        int maxW = (int) screenSize.getWidth();
+        int maxH = (int) screenSize.getHeight() - 70;
 
         width = inputDimensions(sc, "Width", maxW);
         height = inputDimensions(sc, "Height", maxH);
 
-        new ElementaryCAApp(width, height);
+        new ElementaryCAApp(width, height, maxW, maxH);
     }
 }
