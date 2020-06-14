@@ -1,4 +1,3 @@
-import com.sun.deploy.util.ArrayUtil;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
@@ -10,16 +9,19 @@ public class ElementaryCAPresenter {
     private int[] currentGeneration;
     private int[][] totalAutomaton;
     private int currentGenerationNumber;
+    private final int[] ruleSet;
 
     /**
      * Constructor to create ECA presenter
      * @param view ElementaryCAView object. Can't be null
      */
-    public ElementaryCAPresenter(final ElementaryCAView view) {
+    public ElementaryCAPresenter(final ElementaryCAView view, final int[] ruleArr) {
         if (view == null) {
             throw new IllegalArgumentException("View cannot be null");
         }
         this.view = view;
+        ArrayUtils.reverse(ruleArr);
+        this.ruleSet = ruleArr;
         this.currentGeneration = new int[view.getWidth()];
         this.totalAutomaton = new int[view.getHeight()][view.getWidth()];
         this.currentGenerationNumber = 1;
@@ -109,7 +111,6 @@ public class ElementaryCAPresenter {
         int a;
         int b;
         int c;
-        int[] rulestring = {0, 0, 0, 1, 0, 0, 1, 0};
 
         if (loc == 0) {
             a = generation[generation.length - 1];
@@ -123,12 +124,10 @@ public class ElementaryCAPresenter {
         }
         b = generation[loc];
 
-        ArrayUtils.reverse(rulestring);
         String neighborhood = "" + a + b + c;
 
         int index = Integer.parseInt(neighborhood,2);
-//        System.out.println(index);
 
-        return rulestring[index];
+        return this.ruleSet[index];
     }
 }
