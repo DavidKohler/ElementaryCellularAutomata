@@ -9,9 +9,9 @@ public class ElementaryCAApp {
      * @param width The width to use for the application window. Cannot be negative or zero.
      * @param height The height to use for the application window. Cannot be negative or zero.
      */
-    public ElementaryCAApp(final int width, final int height, final int maxW, final int maxH, final int[] ruleSet) {
+    public ElementaryCAApp(final int width, final int height, final int maxW, final int maxH, final int[] ruleSet, final boolean simpleStart) {
         final ElementaryCAView elemCAView = new ElementaryCAView(width, height, maxW, maxH);
-        final ElementaryCAPresenter elemCAPresenter = new ElementaryCAPresenter(elemCAView, ruleSet);
+        final ElementaryCAPresenter elemCAPresenter = new ElementaryCAPresenter(elemCAView, ruleSet, simpleStart);
         elemCAPresenter.start();
     }
 
@@ -78,6 +78,38 @@ public class ElementaryCAApp {
     }
 
     /**
+     * Prompts user for simple or random initial conditions
+     * @param sc    Scanner object for user input
+     * @return      false if random, true if simple condition chosen
+     */
+    public static boolean inputSimpleStart(Scanner sc) {
+        int choice;
+        do {
+            System.out.println("\nPlease Choose One Of The Following Options (Enter Choice # Below)");
+            System.out.println("1) Start with simple initial condition");
+            System.out.println("2) Start with random initial condition");
+            System.out.print("Choice: ");
+            while (!sc.hasNextInt()) {
+                System.out.println("Please only enter 1 or 2!");
+                System.out.println("\nPlease Choose One Of The Following Options (Enter Choice # Below)");
+                System.out.println("1) Start with simple initial condition");
+                System.out.println("2) Start with random initial condition");
+                System.out.print("Choice: ");
+                sc.next();
+            }
+            choice = sc.nextInt();
+            if (choice < 1 || choice > 2) {
+                System.out.println("Please only enter 1 or 2!");
+            }
+        } while (choice < 1 || choice > 2);
+
+        if (choice == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Main method
      * @param args The runtime args.
      */
@@ -85,6 +117,7 @@ public class ElementaryCAApp {
         int width;
         int height;
         int[] ruleSet;
+        boolean simpleStart;
 
         Scanner sc = new Scanner(System.in);
 
@@ -96,7 +129,8 @@ public class ElementaryCAApp {
         height = inputDimensions(sc, "Height", maxH);
 
         ruleSet = inputRulenumber(sc);
+        simpleStart = inputSimpleStart(sc);
 
-        new ElementaryCAApp(width, height, maxW, maxH, ruleSet);
+        new ElementaryCAApp(width, height, maxW, maxH, ruleSet, simpleStart);
     }
 }

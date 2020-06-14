@@ -15,7 +15,7 @@ public class ElementaryCAPresenter {
      * Constructor to create ECA presenter
      * @param view ElementaryCAView object. Can't be null
      */
-    public ElementaryCAPresenter(final ElementaryCAView view, final int[] ruleArr) {
+    public ElementaryCAPresenter(final ElementaryCAView view, final int[] ruleArr, final boolean simpleStart) {
         if (view == null) {
             throw new IllegalArgumentException("View cannot be null");
         }
@@ -27,13 +27,18 @@ public class ElementaryCAPresenter {
         this.currentGenerationNumber = 1;
         final Random random = new Random();
 
-        for (int i = 0; i < currentGeneration.length; i++) {
-            currentGeneration[i] = random.nextInt(2);
+        if (simpleStart == false) {
+            for (int i = 0; i < currentGeneration.length; i++) {
+                currentGeneration[i] = random.nextInt(2);
+            }
+        } else {
+            Arrays.fill(currentGeneration, 0);
+            currentGeneration[currentGeneration.length / 2] = 1;
         }
-//        Arrays.fill(currentGeneration, 0);
-//        currentGeneration[currentGeneration.length / 2] = 1;
+
         for (int[] row: totalAutomaton)
             Arrays.fill(row, 0);
+
         totalAutomaton[0] = currentGeneration.clone();
     }
 

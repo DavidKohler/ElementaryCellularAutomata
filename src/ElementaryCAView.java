@@ -47,7 +47,10 @@ public class ElementaryCAView {
         for (int row = 0; row < automaton.length; row++) {
             for (int col = 0; col < automaton[row].length; col++) {
                 if (automaton[row][col] == 1) {
-                    StdDraw.filledSquare((col * this.cellMultiplier) + (this.cellMultiplier / 2), ((automaton.length - 1 - row) * this.cellMultiplier) + (this.cellMultiplier / 2), this.cellSize);
+                    StdDraw.filledSquare(
+                            (col * this.cellMultiplier) + (this.cellMultiplier / 2),
+                            ((automaton.length - 1 - row) * this.cellMultiplier) + (this.cellMultiplier / 2),
+                            this.cellSize);
                 }
             }
         }
