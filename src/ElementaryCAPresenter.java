@@ -10,12 +10,14 @@ public class ElementaryCAPresenter {
     private int[][] totalAutomaton;
     private int currentGenerationNumber;
     private final int[] ruleSet;
+    private final boolean animationOn;
+    private final boolean scrollOn;
 
     /**
      * Constructor to create ECA presenter
      * @param view ElementaryCAView object. Can't be null
      */
-    public ElementaryCAPresenter(final ElementaryCAView view, final int[] ruleArr, final boolean simpleStart) {
+    public ElementaryCAPresenter(final ElementaryCAView view, final int[] ruleArr, final boolean simpleStart, final boolean[] hasAnimation) {
         if (view == null) {
             throw new IllegalArgumentException("View cannot be null");
         }
@@ -36,10 +38,27 @@ public class ElementaryCAPresenter {
             currentGeneration[currentGeneration.length / 2] = 1;
         }
 
+        if (hasAnimation[0] == true) {
+            if (hasAnimation[1] == true) {
+                this.animationOn = true;
+                this.scrollOn = true;
+            } else {
+                this.animationOn = true;
+                this.scrollOn = false;
+            }
+        } else {
+            this.animationOn = false;
+            this.scrollOn = false;
+        }
+
         for (int[] row: totalAutomaton)
             Arrays.fill(row, 0);
 
-        totalAutomaton[0] = currentGeneration.clone();
+        if (this.scrollOn == true) {
+            totalAutomaton[totalAutomaton.length - 1] = currentGeneration.clone();
+        } else {
+            totalAutomaton[0] = currentGeneration.clone();
+        }
     }
 
     /**
@@ -49,9 +68,20 @@ public class ElementaryCAPresenter {
         while (this.currentGenerationNumber < view.getHeight()) {
             currentGeneration = progressGeneration(currentGeneration);
             totalAutomaton = progressAutomaton(totalAutomaton);
-            view.drawGeneration(totalAutomaton);
-            this.currentGenerationNumber += 1;
+            if (this.animationOn == true) {
+                view.drawGeneration(totalAutomaton);
+            }
+            if (this.scrollOn == false) {
+                this.currentGenerationNumber += 1;
+            } else {
+                // seems to help with screen tearing
+                StdDraw.pause(40);
+            }
         }
+        if (this.animationOn == false) {
+            view.drawGeneration(totalAutomaton);
+        }
+        System.out.println("Finished!");
     }
 
     /**
@@ -77,8 +107,14 @@ public class ElementaryCAPresenter {
      * @return              new 2d array with new generation copied in
      */
     private int[][] progressAutomaton(final int[][] automaton) {
-        final int[][] nextAutomaton = cloneAutomaton(automaton);
-        nextAutomaton[this.currentGenerationNumber] = this.currentGeneration.clone();
+        final int[][] nextAutomaton;
+        if (this.scrollOn == false) {
+            nextAutomaton = cloneAutomaton(automaton);
+            nextAutomaton[this.currentGenerationNumber] = cloneGeneration(this.currentGeneration);
+        } else {
+            nextAutomaton = shiftAutomaton(automaton);
+            nextAutomaton[nextAutomaton.length - 1] = cloneGeneration(this.currentGeneration);
+        }
 
         return nextAutomaton;
     }
@@ -102,6 +138,19 @@ public class ElementaryCAPresenter {
         final int[][] newAutomaton = new int[originalAutomaton.length][];
         for (int row = 0; row < originalAutomaton.length; ++row) {
             newAutomaton[row] = Arrays.copyOf(originalAutomaton[row], originalAutomaton[row].length);
+        }
+        return newAutomaton;
+    }
+
+    /**
+     * Clones and shifts 2d automaton array and return it
+     * @param originalAutomaton     original 2d array to clone
+     * @return                      cloned and shifted 2d array
+     */
+    private int[][] shiftAutomaton(final int originalAutomaton[][]) {
+        final int[][] newAutomaton = new int[originalAutomaton.length][];
+        for (int row = 0; row < originalAutomaton.length - 1; ++row) {
+            newAutomaton[row] = Arrays.copyOf(originalAutomaton[row + 1], originalAutomaton[row + 1].length);
         }
         return newAutomaton;
     }

@@ -9,9 +9,9 @@ public class ElementaryCAApp {
      * @param width The width to use for the application window. Cannot be negative or zero.
      * @param height The height to use for the application window. Cannot be negative or zero.
      */
-    public ElementaryCAApp(final int width, final int height, final int maxW, final int maxH, final int[] ruleSet, final boolean simpleStart) {
+    public ElementaryCAApp(final int width, final int height, final int maxW, final int maxH, final int[] ruleSet, final boolean simpleStart, final boolean[] hasAnimation) {
         final ElementaryCAView elemCAView = new ElementaryCAView(width, height, maxW, maxH);
-        final ElementaryCAPresenter elemCAPresenter = new ElementaryCAPresenter(elemCAView, ruleSet, simpleStart);
+        final ElementaryCAPresenter elemCAPresenter = new ElementaryCAPresenter(elemCAView, ruleSet, simpleStart, hasAnimation);
         elemCAPresenter.start();
     }
 
@@ -73,7 +73,6 @@ public class ElementaryCAApp {
             ruleSet[i + offset] = val;
         }
         System.out.println("Ruleset Confirmed!");
-        System.out.println(Arrays.toString(ruleSet));
         return ruleSet;
     }
 
@@ -103,11 +102,71 @@ public class ElementaryCAApp {
             }
         } while (choice < 1 || choice > 2);
 
-        System.out.println("Choice Confirmed!");
+        System.out.println("Initial Condition Confirmed!");
         if (choice == 1) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Prompts user for animation preferences (and scroll preferences if animation enabled)
+     * @param sc    Scanner object for user input
+     * @return      boolean array (F,F) if no animation, (T,T/F) if animation enabled
+     */
+    public static boolean[] inputAnimationSelect(Scanner sc) {
+        int choice;
+        do {
+            System.out.println("\nPlease Choose One Of The Following Options (Enter Choice # Below)");
+            System.out.println("1) No Animation (Faster)");
+            System.out.println("2) Yes Animation (Slower)");
+            System.out.print("Choice: ");
+            while (!sc.hasNextInt()) {
+                System.out.println("Please only enter 1 or 2!");
+                System.out.println("\nPlease Choose One Of The Following Options (Enter Choice # Below)");
+                System.out.println("1) No Animation (Faster)");
+                System.out.println("2) Yes Animation (Slower)");
+                System.out.print("Choice: ");
+                sc.next();
+            }
+            choice = sc.nextInt();
+            if (choice < 1 || choice > 2) {
+                System.out.println("Please only enter 1 or 2!");
+            }
+        } while (choice < 1 || choice > 2);
+
+        System.out.println("Animation Choice Confirmed!");
+
+        if (choice == 1) {
+            return new boolean[]{false, false};
+        }
+
+        int aniChoice;
+        do {
+            System.out.println("\nPlease Choose One Of The Following Options (Enter Choice # Below)");
+            System.out.println("1) Scroll Off (Finite)");
+            System.out.println("2) Scroll On (Infinite)");
+            System.out.print("Choice: ");
+            while (!sc.hasNextInt()) {
+                System.out.println("Please only enter 1 or 2!");
+                System.out.println("\nPlease Choose One Of The Following Options (Enter Choice # Below)");
+                System.out.println("1) Scroll Off (Finite)");
+                System.out.println("2) Scroll On (Infinite)");
+                System.out.print("Choice: ");
+                sc.next();
+            }
+            aniChoice = sc.nextInt();
+            if (aniChoice < 1 || aniChoice > 2) {
+                System.out.println("Please only enter 1 or 2!");
+            }
+        } while (aniChoice < 1 || aniChoice > 2);
+
+        System.out.println("Scroll Choice Confirmed!");
+
+        if (aniChoice == 1) {
+            return new boolean[]{true, false};
+        }
+        return new boolean[]{true, true};
     }
 
     /**
@@ -119,9 +178,9 @@ public class ElementaryCAApp {
         int height;
         int[] ruleSet;
         boolean simpleStart;
+        boolean[] hasAnimation;
 
         Scanner sc = new Scanner(System.in);
-
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int maxW = (int) screenSize.getWidth();
         int maxH = (int) screenSize.getHeight() - 70;
@@ -131,7 +190,8 @@ public class ElementaryCAApp {
 
         ruleSet = inputRulenumber(sc);
         simpleStart = inputSimpleStart(sc);
+        hasAnimation = inputAnimationSelect(sc);
 
-        new ElementaryCAApp(width, height, maxW, maxH, ruleSet, simpleStart);
+        new ElementaryCAApp(width, height, maxW, maxH, ruleSet, simpleStart, hasAnimation);
     }
 }
