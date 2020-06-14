@@ -55,6 +55,5 @@ public class ElementaryCAView {
             }
         }
         StdDraw.show();
-        StdDraw.pause(0);
     }
 }

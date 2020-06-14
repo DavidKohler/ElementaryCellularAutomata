@@ -103,6 +103,7 @@ public class ElementaryCAApp {
             }
         } while (choice < 1 || choice > 2);
 
+        System.out.println("Choice Confirmed!");
         if (choice == 1) {
             return true;
         }
